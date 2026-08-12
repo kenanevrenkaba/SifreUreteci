@@ -10,7 +10,7 @@ while (yinele != "H")
 
     int sifreUzunlugu;
 
-    while (!int.TryParse(Console.ReadLine(), out sifreUzunlugu) || sifreUzunlugu <= 0)
+    while (!int.TryParse(Console.ReadLine(), out sifreUzunlugu) || sifreUzunlugu <= 3)
     {
         Console.WriteLine("Lütfen sayısal bir değer giriniz!");
         Console.Write("Kaç karakterden oluşan bir şifre belirlemek istiyorsunuz? ");
@@ -39,7 +39,29 @@ while (yinele != "H")
         karakterHavuzu += "!@#$%^&*()";
     }
 
-    string uretilenSifre = SifreUret(sifreUzunlugu, karakterHavuzu);
+    string ozelMetin = "";
+
+    string ozelMetinSecimi = EvetHayirAl("Şifrenize özel bir kelime eklemek ister misiniz?");
+
+    if (ozelMetinSecimi == "E")
+    {
+        Console.Write("Eklemek istediğiniz kelimeyi türkçe karakter (ç,ğ,ı,ö,ş,ü,Ç,Ğ,İ,Ö,Ş,Ü) kullanmadan giriniz: ");
+        Console.WriteLine("En fazla " + (sifreUzunlugu - 1) + " haneli bir kelime girişi yapabilirsiniz.");
+        ozelMetin = Console.ReadLine();
+
+        while (ozelMetin.Length >= sifreUzunlugu || ozelMetin.Any(c => "çğıöşüÇĞİÖŞÜ".Contains(c)))
+        {
+            Console.Write("Eklemek istediğiniz kelimeyi türkçe karakter (ç,ğ,ı,ö,ş,ü,Ç,Ğ,İ,Ö,Ş,Ü) kullanmadan giriniz: ");
+            Console.WriteLine("En fazla " + (sifreUzunlugu - 1) + " haneli bir kelime girişi yapabilirsiniz.");
+            ozelMetin = Console.ReadLine();
+        }
+    }
+
+    string uretilenSifre = SifreUret((sifreUzunlugu - ozelMetin.Length), karakterHavuzu);
+
+    Random rnd = new Random();
+    int eklemeIndex = rnd.Next(0, uretilenSifre.Length + 1);
+    uretilenSifre = uretilenSifre.Insert(eklemeIndex, ozelMetin);
 
     gecmisSifreler.Add(uretilenSifre);
 
@@ -66,17 +88,43 @@ while (yinele != "H")
     }
 
 
-    yinele = EvetHayirAl("Başka şifre üretmek istiyor musunuz?");
+    string uretDevam = EvetHayirAl("Başka şifre üretmek istiyor musunuz?");
+
+    if (uretDevam == "H")
+    {
+        Console.WriteLine("Oturum boyunca " + gecmisSifreler.Count + " şifre ürettiniz.");
+
+        int a = 0;
+        foreach (string eleman in gecmisSifreler)
+        {
+            a++;
+            Console.WriteLine(a + ". " + eleman);
+        }
+
+        string kaydet = EvetHayirAl("Şifrelerinizi sifreler.txt dosyasına kaydetmek ister misiniz?");
+
+        if (kaydet == "E")
+        {
+            File.AppendAllLines("sifreler.txt", gecmisSifreler);
+            Console.WriteLine("Şifreleriniz 'sifreler.txt' dosyasına kaydedildi.");
+        }
+
+        string cevap = EvetHayirAl("Şifre geçmişini sıfırlamak ister misiniz?");
+
+        if (cevap == "E")
+        {
+            gecmisSifreler.Clear();
+            Console.WriteLine("Şifre geçmişini sıfırladınız.");
+        }
+
+        uretDevam = EvetHayirAl("Oturuma devam etmek istiyor musunuz?");
+    }
+
+    yinele = uretDevam;
 }
 
 Console.WriteLine("Güle Güle...");
 
-int a = 0;
-foreach (string eleman in gecmisSifreler)
-{
-    a++;
-    Console.WriteLine(a + ". " + eleman);
-}
 
 static string EvetHayirAl(string soruMesaji)
 {
