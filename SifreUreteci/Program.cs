@@ -1,4 +1,6 @@
-﻿List<string> gecmisSifreler = new List<string>();
+﻿using SifreUreteci;
+
+List<string> gecmisSifreler = new List<string>();
 
 Console.WriteLine("Hoş Geldiniz");
 
@@ -10,11 +12,13 @@ while (yinele != "H")
 
     int sifreUzunlugu;
 
-    while (!int.TryParse(Console.ReadLine(), out sifreUzunlugu) || sifreUzunlugu <= 3)
+    while (!int.TryParse(Console.ReadLine(), out sifreUzunlugu) || sifreUzunlugu < 4)
     {
+        Console.WriteLine("Şifreniz minimum 4 karakterden oluşmalıdır.");
         Console.WriteLine("Lütfen sayısal bir değer giriniz!");
         Console.Write("Kaç karakterden oluşan bir şifre belirlemek istiyorsunuz? ");
     }
+    
 
     string karakterHavuzu = "0123456789";
 
@@ -67,25 +71,8 @@ while (yinele != "H")
 
     Console.Write("Üretilen şifreniz: " + uretilenSifre);
 
-    if (sifreUzunlugu > 16 && buyukHarf == "E" && kucukHarf == "E" && sembol == "E")
-    {
-        Console.WriteLine(" -- Çok Güçlü Şifre");
-    }
-
-    else if ((sifreUzunlugu > 12 && buyukHarf == "E" && kucukHarf == "E" && sembol == "E") || sifreUzunlugu > 16)
-    {
-        Console.WriteLine(" -- Güçlü Şifre");
-    }
-
-    else if (sifreUzunlugu > 8)
-    {
-        Console.WriteLine(" -- Orta Şifre");
-    }
-
-    else
-    {
-        Console.WriteLine(" -- Zayıf Şifre");
-    }
+    string gucDerecesi = SifreGucuHesapla.GucHesapla(uretilenSifre, sifreUzunlugu, ozelMetin, ozelMetinSecimi);
+    Console.WriteLine(" -- " + gucDerecesi);
 
 
     string uretDevam = EvetHayirAl("Başka şifre üretmek istiyor musunuz?");
