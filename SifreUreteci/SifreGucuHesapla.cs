@@ -40,22 +40,22 @@ public class SifreGucuHesapla
 
         if (puan >= 100)
         {
-            return "Çok güçlü şifre.";
+            return "Çok Güçlü";
         }
 
         if (puan >= 80)
         {
-            return "Güçlü şifre";
+            return "Güçlü";
         }
 
         if (puan >= 45)
         {
-            return "Orta seviye şifre";
+            return "Orta Seviye";
         }
 
         else
         {
-            return "Zayıf şifre.";
+            return "Zayıf";
         }
     }
 }

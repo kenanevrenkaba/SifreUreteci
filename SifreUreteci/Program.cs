@@ -1,6 +1,6 @@
 ﻿using SifreUreteci;
 
-List<string> gecmisSifreler = new List<string>();
+List<Sifre> gecmisSifreler = new List<Sifre>();
 
 Console.WriteLine("Hoş Geldiniz");
 
@@ -47,9 +47,10 @@ while (yinele != "H")
 
     string gucDerecesi = SifreGucuHesapla.GucHesapla(uretilenSifre, sifreUzunlugu, ozelMetin, ozelMetinSecimi);
     Console.WriteLine(" -- " + gucDerecesi);
-
-    yinele = DosyaYoneticisi.Dosyala(gecmisSifreler, uretilenSifre);
+    
+    Sifre yeniSifre = new Sifre(uretilenSifre, sifreUzunlugu, gucDerecesi);
+    
+    yinele = DosyaYoneticisi.Dosyala(gecmisSifreler, yeniSifre);
 }
 
 Console.WriteLine("Güle Güle...");
-
